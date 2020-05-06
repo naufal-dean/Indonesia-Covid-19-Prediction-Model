@@ -13,3 +13,6 @@ K-06
 # Cara menjalankan program
 1. Install semua python dependency di requirements.txt. Gunakan command `pip install -r requirements.txt`.
 2. Jalankan `python main.py` melalui terminal atau cmd dan gambar akan diplot ke folder `plt`.
+
+# Sumber datasheet
+[https://ourworldindata.org/covid-cases](https://ourworldindata.org/covid-cases)
