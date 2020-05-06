@@ -30,6 +30,20 @@ class Modeler:
         self.sigmoid_coeff, _ = curve_fit(self.sigmoid, x, y, p0)
         return self.sigmoid_coeff
 
+    def get_regression_total_case_accuracy(self):
+        if self.sigmoid_coeff is None:
+            self.get_regression_model()
+        # Predict data
+        x_data = self.df_indo['date'].transform(
+            lambda d: datetime.toordinal(d)
+        ).values
+        y_data = self.df_indo['total_cases'].values
+        y_pred = self.sigmoid(x_data, *self.sigmoid_coeff)
+        print('RMSE (root mean squared error)',
+              mean_squared_error(y_data, y_pred))
+        print('R^2 (coefficient of determination)',
+              r2_score(y_data, y_pred))
+
     def plot_observed_total_case(self, fig, ax):
         # Plot line data
         ax.bar(self.df_indo['date'].values, self.df_indo['total_cases'],
@@ -57,7 +71,7 @@ class Modeler:
         print('Total case:')
         print(f'Total kasus positif {pred_d} hari dari tanggal 5 Mei 2020 =',
               int(total_case[-1]), 'orang')
-        y_data = df_indo['total_cases'].values
+        y_data = self.df_indo['total_cases'].values
         print('RMSE (root mean squared error)',
               mean_squared_error(y_data, total_case[:len(y_data)]))
         print('R^2 (coefficient of determination)',
@@ -155,7 +169,7 @@ class Modeler:
                 print("New case under 10 date =",
                       str(datetime.fromordinal(date + 1))
                       .split()[0])
-        y_data = df_indo['new_cases'].values
+        y_data = self.df_indo['new_cases'].values
         print('RMSE (root mean squared error)',
               mean_squared_error(y_data, new_case[:len(y_data)]))
         print('R^2 (coefficient of determination)',

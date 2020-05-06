@@ -28,4 +28,5 @@ if __name__ == '__main__':
         # Plot prediction data
         m = Modeler(df_indo.iloc[65:])
         m.plot_observed_and_expected_total_case(90, save)
+        print()
         m.plot_observed_and_expected_new_case(90, save)
