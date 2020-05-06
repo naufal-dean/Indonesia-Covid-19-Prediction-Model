@@ -1,6 +1,7 @@
 import pandas as pd
 
 from plotter import plot_data_1, plot_data_2
+from modeler import Modeler
 
 
 if __name__ == '__main__':
@@ -19,7 +20,12 @@ if __name__ == '__main__':
     # Plot data
     if plot:
         save = True
-        save = False
-        plot_data_1(df_indo, save)
-        plot_data_2(df_indo, 'new_cases', 'blue', save)
-        plot_data_2(df_indo, 'new_deaths', 'red', save)
+        # save = False
+        # Plot actual data
+        plot_data_1(df_indo.iloc[30:], save)
+        plot_data_2(df_indo.iloc[30:], 'new_cases', 'blue', save)
+        plot_data_2(df_indo.iloc[30:], 'new_deaths', 'red', save)
+        # Plot prediction data
+        m = Modeler(df_indo.iloc[65:])
+        m.plot_observed_and_expected_total_case(90, save)
+        m.plot_observed_and_expected_new_case(90, save)

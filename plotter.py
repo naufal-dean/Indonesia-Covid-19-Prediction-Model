@@ -1,4 +1,5 @@
 import matplotlib.dates as mdates
+import matplotlib.lines as mlines
 import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt
 
@@ -7,8 +8,8 @@ def plot_data_1(df_indo, save):
     # Create figure
     fig, ax = plt.subplots(figsize=(16, 8))
     # Plot line data
-    ax.plot(df_indo['date'], df_indo['total_cases'], color='blue')
-    ax.plot(df_indo['date'], df_indo['total_deaths'], color='red')
+    ax.plot(df_indo['date'], df_indo['total_cases'], color='blue', linewidth=4)
+    ax.plot(df_indo['date'], df_indo['total_deaths'], color='red', linewidth=4)
     # Setup axes format
     ax.set(
         xlabel='Tanggal',
@@ -23,9 +24,9 @@ def plot_data_1(df_indo, save):
     fig.suptitle('Total Kasus Positif dan Meninggal Covid-19 di Indonesia\n'
                  'Hingga Tanggal 5 Mei 2020', fontsize=20)
     # Setup legend
-    blue_patch = mpatches.Patch(color='blue', label='Positif')
-    red_patch = mpatches.Patch(color='red', label='Meninggal')
-    plt.legend(handles=[blue_patch, red_patch])
+    blue_line = mlines.Line2D([], [], color='blue', label='Positif')
+    red_line = mlines.Line2D([], [], color='red', label='Meninggal')
+    plt.legend(handles=[blue_line, red_line])
     # Show
     if (save):
         fig.savefig('plt/plot_total_positif_dan_meninggal.jpg')
