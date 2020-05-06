@@ -56,7 +56,7 @@ class Modeler:
 
     def plot_observed_and_expected_total_case(self, pred_d, save):
         # Create figure
-        fig, ax = plt.subplots(figsize=(16, 8))
+        fig, ax = plt.subplots(figsize=(16, 12))
         # Plot data
         fig, ax = self.plot_observed_total_case(fig, ax)
         fig, ax = self.plot_expected_total_case(fig, ax, pred_d)
@@ -103,20 +103,53 @@ class Modeler:
         # y value predicted
         total_case = self.sigmoid(x_pred, *self.sigmoid_coeff)
         new_case = [0]
+        max_new_case = -1
+        max_new_case_idx = -1
         for i in range(1, len(total_case)):
             if total_case[i] < 0 or total_case[i - 1] < 0:
                 new_case.append(0)
             else:
-                new_case.append(total_case[i] - total_case[i - 1])
+                new_case_daily = total_case[i] - total_case[i - 1]
+                new_case.append(new_case_daily)
+                # Get max new case
+                if new_case_daily > max_new_case:
+                    max_new_case = new_case_daily
+                    max_new_case_idx = i
+
         new_case = np.array(new_case)
         plt.plot(x_pred, new_case, color='red', linewidth=4)
         ax.set_ylim(bottom=0)
-        # Return
+        # Aditional info
+        print("New case:")
+        print("Max new case in a day  =", int(max_new_case))
+        print("Max new case date      =",
+              str(datetime.fromordinal(x_pred[max_new_case_idx]))
+              .split()[0])
+        under_1_new_case = False
+        under_5_new_case = False
+        under_10_new_case = False
+        for case, date in zip(reversed(new_case), reversed(x_pred)):
+            if case > 1 and not under_1_new_case:
+                under_1_new_case = True
+                print("New case under 1 date  =",
+                      str(datetime.fromordinal(date + 1))
+                      .split()[0])
+            if case > 5 and not under_5_new_case:
+                under_5_new_case = True
+                print("New case under 5 date  =",
+                      str(datetime.fromordinal(date + 1))
+                      .split()[0])
+            if case > 10 and not under_10_new_case:
+                under_10_new_case = True
+                print("New case under 10 date =",
+                      str(datetime.fromordinal(date + 1))
+                      .split()[0])
+            # Return
         return fig, ax
 
     def plot_observed_and_expected_new_case(self, pred_d, save):
         # Create figure
-        fig, ax = plt.subplots(figsize=(16, 8))
+        fig, ax = plt.subplots(figsize=(16, 12))
         # Plot data
         fig, ax = self.plot_observed_new_case(fig, ax)
         fig, ax = self.plot_expected_new_case(fig, ax, pred_d)
@@ -143,8 +176,6 @@ class Modeler:
 
 
 if __name__ == '__main__':
-    print('\n' * 4)
-
     # Filter dataframe
     pd.options.display.max_columns = None
     df = pd.read_csv('data/owid-covid-data.csv')
