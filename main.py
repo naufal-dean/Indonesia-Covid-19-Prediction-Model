@@ -4,8 +4,8 @@ from plotter import plot_data_1, plot_data_2
 
 
 if __name__ == '__main__':
-    save = True
-    # save = False
+    plot = True
+    # plot = False
 
     # Filter dataframe
     pd.options.display.max_columns = None
@@ -17,6 +17,9 @@ if __name__ == '__main__':
     # print(df_indo)
 
     # Plot data
-    plot_data_1(df_indo, save)
-    plot_data_2(df_indo, 'new_cases', 'blue', save)
-    plot_data_2(df_indo, 'new_deaths', 'red', save)
+    if plot:
+        save = True
+        save = False
+        plot_data_1(df_indo, save)
+        plot_data_2(df_indo, 'new_cases', 'blue', save)
+        plot_data_2(df_indo, 'new_deaths', 'red', save)

@@ -15,6 +15,7 @@ def plot_data_1(df_indo, save):
         ylabel='Jumlah'
     )
     ax.grid(True)
+    ax.set_ylim(bottom=0)
     ax.xaxis.set_major_locator(mdates.WeekdayLocator(byweekday=mdates.MO))
     ax.xaxis.set_minor_locator(mdates.DayLocator())
     # Setup figure
@@ -37,7 +38,6 @@ def plot_data_2(df_indo, y_bar_data_name, color, save):
     fig, ax = plt.subplots(figsize=(16, 8))
     # Plot line data
     ax.bar(df_indo['date'].values, df_indo[y_bar_data_name], color=color)
-    ax.xaxis_date()
     # Setup axes format
     ax.set(
         xlabel='Tanggal',
