@@ -1,3 +1,6 @@
 # python virtualenv
 venv/
 activate.bat
+
+# python pycache
+__pycache__
