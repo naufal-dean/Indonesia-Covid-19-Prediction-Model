@@ -6,6 +6,7 @@ import numpy as np
 import pandas as pd
 from datetime import datetime
 from scipy.optimize import curve_fit
+from sklearn.metrics import mean_squared_error, r2_score
 
 
 class Modeler:
@@ -40,17 +41,27 @@ class Modeler:
         x = self.df_indo['date'].transform(
             lambda d: datetime.toordinal(d)
         ).values
+        # Predict using the sigmoid curve
+        if self.sigmoid_coeff is None:
+            self.get_regression_model()
         # Next n day, to be predicted
         x_pred = np.append(
             x,
             [i for i in range(x[-1] + 1, x[-1] + pred_d + 1)]
         )
-        # Predict using the sigmoid curve
-        if self.sigmoid_coeff is None:
-            self.get_regression_model()
-        plt.plot(x_pred, self.sigmoid(x_pred, *self.sigmoid_coeff),
-                 color='red', linewidth=4)
+        total_case = self.sigmoid(x_pred, *self.sigmoid_coeff)
+        # Plot data
+        plt.plot(x_pred, total_case, color='red', linewidth=4)
         ax.set_ylim(bottom=0)
+        # Additional info
+        print('Total case:')
+        print(f'Total kasus positif {pred_d} hari dari tanggal 5 Mei 2020 =',
+              int(total_case[-1]), 'orang')
+        y_data = df_indo['total_cases'].values
+        print('RMSE (root mean squared error)',
+              mean_squared_error(y_data, total_case[:len(y_data)]))
+        print('R^2 (coefficient of determination)',
+              r2_score(y_data, total_case[:len(y_data)]))
         # Return
         return fig, ax
 
@@ -144,7 +155,12 @@ class Modeler:
                 print("New case under 10 date =",
                       str(datetime.fromordinal(date + 1))
                       .split()[0])
-            # Return
+        y_data = df_indo['new_cases'].values
+        print('RMSE (root mean squared error)',
+              mean_squared_error(y_data, new_case[:len(y_data)]))
+        print('R^2 (coefficient of determination)',
+              r2_score(y_data, new_case[:len(y_data)]))
+        # Return
         return fig, ax
 
     def plot_observed_and_expected_new_case(self, pred_d, save):
@@ -190,4 +206,5 @@ if __name__ == '__main__':
     save = True
     # save = False
     m.plot_observed_and_expected_total_case(90, save)
+    print()
     m.plot_observed_and_expected_new_case(90, save)
