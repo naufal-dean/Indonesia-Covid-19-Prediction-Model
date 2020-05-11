@@ -20,8 +20,10 @@ def plot_data_1(df_indo, save):
     ax.xaxis.set_minor_locator(mdates.DayLocator())
     # Setup figure
     fig.autofmt_xdate()
-    fig.suptitle('Total Kasus Positif dan Meninggal Covid-19 di Indonesia\n'
-                 'Hingga Tanggal 5 Mei 2020', fontsize=20)
+    day = df_indo.tail(1)['date'].to_string().split()[1].split('-')[2]
+    fig.suptitle(f'Total Kasus Positif dan Meninggal Covid-19 di Indonesia\n'
+                 f'Hingga Tanggal {day} Mei 2020',
+                 fontsize=20)
     # Setup legend
     blue_line = mlines.Line2D([], [], color='blue', label='Positif')
     red_line = mlines.Line2D([], [], color='red', label='Meninggal')
@@ -48,8 +50,10 @@ def plot_data_2(df_indo, y_bar_data_name, color, save):
     # Setup figure
     fig.autofmt_xdate()
     type = 'Positif' if y_bar_data_name == 'new_cases' else 'Meninggal'
+    day = df_indo.tail(1)['date'].to_string().split()[1].split('-')[2]
     fig.suptitle(f'Kasus {type} Baru Covid-19 di Indonesia\n'
-                 'Hingga Tanggal 5 Mei 2020', fontsize=20)
+                 f'Hingga Tanggal {day} Mei 2020',
+                 fontsize=20)
     # Show
     if (save):
         fig.savefig(f'plt/plot_{y_bar_data_name}.jpg')

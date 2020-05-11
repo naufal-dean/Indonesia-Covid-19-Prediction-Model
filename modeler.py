@@ -94,8 +94,10 @@ class Modeler:
         ax.xaxis.set_minor_locator(mdates.DayLocator())
         # Setup figure
         fig.autofmt_xdate()
+        day = self.df_indo.tail(1)['date'].to_string().split()[1].split('-')[2]
         fig.suptitle('Prediksi Total Kasus Positif Covid-19 di Indonesia\n'
-                     f'{pred_d} Hari Sejak Tanggal 5 Mei 2020', fontsize=20)
+                     f'{pred_d} Hari Sejak Tanggal {day} Mei 2020',
+                     fontsize=20)
         # Setup legend
         blue_patch = mpatches.Patch(color='blue', label='Data aktual')
         red_line = mlines.Line2D([], [], color='red', label='Prediksi')
@@ -192,8 +194,10 @@ class Modeler:
         ax.xaxis.set_minor_locator(mdates.DayLocator())
         # Setup figure
         fig.autofmt_xdate()
+        day = self.df_indo.tail(1)['date'].to_string().split()[1].split('-')[2]
         fig.suptitle('Prediksi Kasus Positif Baru Covid-19 di Indonesia\n'
-                     f'{pred_d} Hari Sejak Tanggal 5 Mei 2020', fontsize=20)
+                     f'{pred_d} Hari Sejak Tanggal {day} Mei 2020',
+                     fontsize=20)
         # Setup legend
         blue_patch = mpatches.Patch(color='blue', label='Data aktual')
         red_line = mlines.Line2D([], [], color='red', label='Prediksi')
